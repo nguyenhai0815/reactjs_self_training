@@ -32,28 +32,42 @@
 
 # 2. KHÁI NIỆM CHÍNH
 
-## 2.1. Hello World
+## Cấu trúc thư mục trong một ứng dụng ReactJS thông thường sẽ bao gồm:
 
-## 2.2. JSX
+    node_modules: Thư mục chứa các package đã được cài đặt bởi npm.
 
-## 2.3. Rendering Elements
+    public: Thư mục chứa các tài nguyên tĩnh của ứng dụng, bao gồm các file HTML, CSS, hình ảnh, favicon, v.v.
 
-## 2.4. Components and Props
+    src: Thư mục chứa mã nguồn của ứng dụng, bao gồm các file .js, .jsx, .css, .scss, v.v.
 
-## 2.5. State and Lifecycle
+    package.json: File chứa thông tin về ứng dụng và các package đã cài đặt.
 
-## 2.6. Xử lý Events
+    package-lock.json: File chứa thông tin về phiên bản cụ thể của các package đã cài đặt.
 
-## 2.7. Rendering có điều kiện
+    README.md: File chứa thông tin về ứng dụng và hướng dẫn sử dụng.
 
-## 2.8. Lists Và Keys
+### 2.1. Hello World
 
-## 2.9. Forms
+### 2.2. JSX
 
-## 2.10. Chuyển State Lên trên
+### 2.3. Rendering Elements
 
-## 2.11. Kết Hợp Và Kế Thừa
+### 2.4. Components and Props
 
-## 2.12. Tư Duy Trong React
+### 2.5. State and Lifecycle
+
+### 2.6. Xử lý Events
+
+### 2.7. Rendering có điều kiện
+
+### 2.8. Lists Và Keys
+
+### 2.9. Forms
+
+### 2.10. Chuyển State Lên trên
+
+### 2.11. Kết Hợp Và Kế Thừa
+
+### 2.12. Tư Duy Trong React
 
 # 3. HƯỚNG DẪN NÂNG CAO
