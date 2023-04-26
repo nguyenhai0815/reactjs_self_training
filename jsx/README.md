@@ -1,70 +1,110 @@
-# Getting Started with Create React App
+# I. JSX
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### JSX là một phần quan trọng trong ReactJS. JSX giống như một syntax extension giúp code trở lên dễ mượt và dễ đọc hơn.
 
-## Available Scripts
+### JSX = Javascript + XML. Nó transform cú pháp dạng gần như XML về thành Javascript. Giúp người lập trình có thể code ReactJS bằng cú pháp của XML thay vì sử dụng Javascript. Các XML elements, attributes và children được chuyển đổi thành các đối số truyền vào React.createElement.
 
-In the project directory, you can run:
+# II. Sử dụng JSX
 
-### `npm start`
+## 1. Cú pháp để sử dụng JSX
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+    <JSXName JSXAttributes>
+        <!-- code here -->
+    </JSXName>
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+#### Ví dụ
 
-### `npm test`
+    <MyButton color="blue" shadowSize={2}>
+      Click Me
+    </MyButton>
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+    --> Nó sẽ được compile sang mã Javascript như sau:
 
-### `npm run build`
+    React.createElement(
+      MyButton,
+      {color: 'blue', shadowSize: 2},
+      'Click Me'
+    )
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+    // style={{ backgroundColor: color, boxShadow: `0 0 ${shadowSize}px black` }}
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 2. React must be in scope
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+    Trong phiên bản React 17 trở lên, bạn không cần phải import React để sử dụng các Component.
+    Nếu bạn viết mã JSX mà không import React, React sẽ sử dụng biến toàn cục React để biên dịch JSX.
+    Tuy nhiên, vẫn nên import React và sử dụng nó như một phần của một tập tin React Component.
 
-### `npm run eject`
+## 3. Using Dot Notation for JSX Type
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+    Bạn có thể gọi đến một React component bằng việc sử dụng "." từ JSX
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+#### Ví dụ
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+    Nếu MyComponents.DatePicker là một component, bạn có thể sử dụng trực tiếp nó từ JSX bằng cách:
+    const MyComponents = {
+      DatePicker: function DatePicker(props) {
+        return <div>Imagine a {props.color} datepicker here.</div>;
+      }
+    }
+    function BlueDatePicker() {
+      return <MyComponents.DatePicker color="blue" />;
+    }
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## 4. HTML Tags vs. React Components
 
-## Learn More
+### React có thể render HTML tags (dạng string) hay React components.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+#### - Để render một HTML tag, chỉ cần sử dụng tên bằng chữ viết thường trong JSX.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+    var helloEl = <div className: "hello">Hello, world!</div>;
 
-### Code Splitting
+#### - Để render một React Component, chỉ cần tạo một biến local bắt đầu bằng chữ cái viết Hoa
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+    var Nav;
+    // Input (JSX)
+    var app = <Nav color="blue" />;
+    // Output (JS)
+    var app = React.createElement(Nav, {color:"blue"});
 
-### Analyzing the Bundle Size
+## 5. Props in JSX
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+    Bạn có thể truyền vào bất kì một cú pháp JS như là một prop bằng việc đặt chúng trong cặp dấu {} trong JSX:
 
-### Making a Progressive Web App
+    ví dụ: <MyComponent foo={1 + 2 + 3 + 4} />
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## 6. String Literals - Chuỗi ký tự
 
-### Advanced Configuration
+    Bạn có thể truyền một string vào props. Hai cách viết sau là tương đương:
+    <MyComponent message="hello world" />
+    <MyComponent message={'hello world'} />
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## 7. Props Default to "True"
 
-### Deployment
+    Nếu bạn không truyền giá trị cho props, nó mặc định là true.
+    Hai cách viết sau là tương đương:
+        <MyTextBox autocomplete />
+        <MyTextBox autocomplete={true} />
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## 8. Spread Attributes - Thuộc tính lây lan
 
-### `npm run build` fails to minify
+    Nếu bạn đã có một props là một object và muốn truyền nó vào trong JSX, bạn có thể sử dụng "..." như là một operator để truyền toàn độ đối tượng props
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## 9. Children in JSX
+
+### Mỗi câu lệnh JSX chứa cả 2 tag mở và đóng, nội dung nằm giữa 2 tag này được truyền như là một prop đặc biệt: props.children.
+
+    1. Bạn có thể đặt một string giữa tag mở và đóng và props.children sẽ là một string. Cái này hữu ích trong việc xây dựng các HTML elements:
+        <MyComponent>Hello world!</MyComponent>
+        -> children: Hello world!
+    2. JSX loại bỏ khoảng trắng ở điểm bắt đầu và kết thúc của một dòng, nó cũng loại bỏ dòng trống.
+    3. Bạn có thể khai báo một JSX elements như là một children.
+        <MyContainer>
+            <MyFirstComponent />
+            <MySecondComponent />
+        </MyContainer>
+    4. Sử dụng câu lệnh điều kiện trong render React elements
+        Dòng JSX chỉ renders một <Header /> neu showHeader la true:
+        <div>
+            {showHeader && <Header />}
+            <Content />
+        </div>
