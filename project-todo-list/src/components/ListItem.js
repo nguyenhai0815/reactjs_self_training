@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Item from './Item';
 
-function ListItem({ items }) {
+function ListItem({ items, onDelete }) {
     return(
         <div className="panel panel-success">
             <div className="panel-heading">List Item</div>
@@ -15,9 +15,16 @@ function ListItem({ items }) {
                     </tr>
                 </thead>
                 <tbody>
-                    {items.map((data, index) => (
-                        <Item key={index} data={data} index={index} />
-                    ))}
+                    { items.length ?
+                        (items.map((data, index) => (
+                            <Item key={index} data={data} index={index} onDelete={onDelete} />
+                        ))) : 
+                        <tr>
+                            <td colSpan="4" className="text-center">  
+                                <h4>No Item</h4>
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
         </div>

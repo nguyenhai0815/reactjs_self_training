@@ -15,6 +15,21 @@ function App() {
         setItem(Items);
     }, []);
 
+    // handle delete Item
+    const handleDelete = (index, itemName) => {
+        const newItems = [...items];
+        const confirmDelete = window.confirm(`Delete ${itemName}?`);
+        if (confirmDelete) {
+            for(let i = 0; i < newItems.length; i++) {
+                if(newItems[i].id === index) {
+                    newItems.splice(i, 1);
+                    break;
+                }
+            }
+        }
+        setItem(newItems);
+    };
+
     return (
         <div className="container">
             <Title />
@@ -34,7 +49,7 @@ function App() {
                     <Form />
                 </div>
             </div>
-            <ListItem items={items}/>
+            <ListItem items={items} onDelete={ handleDelete } />
         </div>
     );
 }
