@@ -1,18 +1,19 @@
 import React, { Component, useState, useEffect } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 import Title from './components/Title';
 import Search from './components/Search';
 import Sort from './components/Sort';
-import Form from './components/Form';
+import FormCreadorUpdate from './components/Form';
 import ListItem from './components/ListItem';
 import Items from './mockdata/Item';
 
 function App() {
     // sử dụng useState để khởi tạo state items
-    const [items, setItem] = useState([]);
+    const [items, setItems] = useState([]);
 
     useEffect(() => {
-        setItem(Items);
+        setItems(Items);
     }, []);
 
     // handle delete Item
@@ -27,7 +28,22 @@ function App() {
                 }
             }
         }
-        setItem(newItems);
+        setItems(newItems);
+    };
+
+    // show/hide modal
+    const [showComponent, setShowComponent] = useState(false);
+
+    const handleClick = () => {
+        setShowComponent(true);
+    }
+    const handleCloseModal = () => {
+        setShowComponent(false);
+    };
+
+    // add item
+    const handleAdd = (newItem) => {
+        setItems([...items, newItem]);
     };
 
     return (
@@ -41,12 +57,17 @@ function App() {
                     <Sort />
                 </div>
                 <div className="col-xs-5 col-sm-5 col-md-5 col-lg-5">
-                    <button type="button" className="btn btn-info btn-block marginB10">Add Item</button>
+                    <button type="button" className="btn btn-info btn-block marginB10" onClick={handleClick}>Add Item</button>
                 </div>
             </div>
-            <div className="row marginB10">
+            <div className="marginB10">
                 <div className="col-md-offset-7 col-md-5">
-                    <Form />
+                    <FormCreadorUpdate
+                        show={showComponent}
+                        onHide={handleCloseModal}
+                        title="Add Item"
+                        handleAdd={handleAdd}
+                    />
                 </div>
             </div>
             <ListItem items={items} onDelete={ handleDelete } />
