@@ -19,6 +19,12 @@ function Item(props) {
     const level = props.data.level;
     const { label, className } = levelInfor[level];
 
+    // handle Delete Item
+    const handleButtonClick = () => {
+        const itemId = props.data.id; 
+        props.onDelete(itemId, props.data.name); 
+    };
+
     return (
         <tr>
             <td className="text-center">{props.index + 1}</td>
@@ -26,7 +32,7 @@ function Item(props) {
             <td className="text-center"><span className={className}>{ label }</span></td>
             <td>
                 <button type="button" className="btn btn-warning btn-sm">Edit</button>&nbsp;
-                <button type="button" className="btn btn-danger btn-sm">Delete</button>
+                <button type="button" className="btn btn-danger btn-sm" onClick={handleButtonClick}>Delete</button>
             </td>
         </tr>
     )
