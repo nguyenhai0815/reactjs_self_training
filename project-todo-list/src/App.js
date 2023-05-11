@@ -41,7 +41,6 @@ function App() {
     const handleCloseModal = () => {
         setShowComponent(false);
     };
-
     const [isEditing, setIsEditing] = useState(false);
 
     // add item

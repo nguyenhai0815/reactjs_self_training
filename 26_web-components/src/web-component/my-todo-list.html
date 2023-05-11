@@ -1,0 +1,42 @@
+<!-- my-todo-list.html -->
+<template>
+    <style>
+        li {
+            margin: 5px 0;
+            padding: 10px;
+            background-color: #eee;
+            border-radius: 5px;
+        }
+    </style>
+    <ul></ul>
+</template>
+
+<script>
+    class MyTodoList extends HTMLElement {
+        constructor() {
+            super();
+
+            const shadow = this.attachShadow({ mode: 'open' });
+
+            const template = document.querySelector('template');
+            const clone = template.content.cloneNode(true);
+            shadow.appendChild(clone);
+        }
+
+        set items(items) {
+            const ul = this.shadowRoot.querySelector('ul');
+
+            while (ul.firstChild) {
+                ul.removeChild(ul.firstChild);
+            }
+
+            items.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item;
+                ul.appendChild(li);
+            });
+        }
+    }
+
+    customElements.define('my-todo-list', MyTodoList);
+</script>
