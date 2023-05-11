@@ -1,7 +1,10 @@
-import React, { Component } from "react";
+import React, { Component, useContext } from "react";
+import { AppContext } from './ListContext';
 import Item from './Item';
 
-function ListItem({ items }) {
+function ListItem() {
+    const { items } = useContext(AppContext);
+
     return(
         <div className="panel panel-success">
             <div className="panel-heading">List Item</div>
@@ -15,9 +18,16 @@ function ListItem({ items }) {
                     </tr>
                 </thead>
                 <tbody>
-                    {items.map((data, index) => (
-                        <Item key={index} data={data} index={index} />
-                    ))}
+                    {items.length ?
+                        (items.map((data, index) => (
+                            <Item key={index} data={data} index={index} />
+                        ))) : 
+                        <tr>
+                            <td colSpan="4" className="text-center">  
+                                <h4>No Item</h4>
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
         </div>
