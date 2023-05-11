@@ -1,6 +1,9 @@
-import React, { Component } from "react";
+import React, { Component, useContext } from "react";
+import { ListContext, AppContext } from './ListContext';
 
 function Item(props) {
+    const { handleDelete, handleEdit, handleShowModalEdit } = useContext(AppContext);
+
     const levelInfor = {
         0: {
             className: 'label label-info',
@@ -20,9 +23,15 @@ function Item(props) {
     const { label, className } = levelInfor[level];
 
     // handle Delete Item
-    const handleButtonClick = () => {
+    const handleButtonDelelte = () => {
         const itemId = props.data.id; 
-        props.onDelete(itemId, props.data.name); 
+        handleDelete(itemId, props.data.name); 
+    };
+
+    // handle edit item
+    const handleItemClick = (item) => {
+        handleShowModalEdit();
+        handleEdit(item);
     };
 
     return (
@@ -31,8 +40,8 @@ function Item(props) {
             <td>{ props.data.name }</td>
             <td className="text-center"><span className={className}>{ label }</span></td>
             <td>
-                <button type="button" className="btn btn-warning btn-sm">Edit</button>&nbsp;
-                <button type="button" className="btn btn-danger btn-sm" onClick={handleButtonClick}>Delete</button>
+                <button type="button" className="btn btn-warning btn-sm" onClick={() => handleItemClick(props.data)}>Edit</button>&nbsp;
+                <button type="button" className="btn btn-danger btn-sm" onClick={handleButtonDelelte}>Delete</button>
             </td>
         </tr>
     )

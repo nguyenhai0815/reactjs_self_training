@@ -4,9 +4,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Title from './components/Title';
 import Search from './components/Search';
 import Sort from './components/Sort';
-import FormCreadorUpdate from './components/Form';
+import FormCreadorUpdate from './components/FormCreadorUpdate';
 import ListItem from './components/ListItem';
 import Items from './mockdata/Item';
+import { AppContext } from './components/ListContext';
 
 function App() {
     // sử dụng useState để khởi tạo state items
@@ -40,10 +41,35 @@ function App() {
     const handleCloseModal = () => {
         setShowComponent(false);
     };
+    const [isEditing, setIsEditing] = useState(false);
 
     // add item
     const handleAdd = (newItem) => {
         setItems([...items, newItem]);
+    };
+
+    // handle edit item
+    const [showModalEdit, setShowModalEdit] = useState(false);
+    const handleShowModalEdit = () => {
+        setShowModalEdit(true);
+        setIsEditing(true);
+    }
+    const handleShowModalAdd = () => {
+        setShowModalEdit(true);
+        setIsEditing(false);
+    }
+    const handleCloseModalEdit = () => {
+        setShowModalEdit(false);
+    };
+
+    const [selectedItem, setSelectedItem] = useState(null);
+
+    const handleEdit = (item) => {
+        setSelectedItem(item);
+        const index = items.findIndex((i) => i.id === item.id);
+        const newItems = [...items];
+        newItems[index] = item;
+        setItems(newItems);
     };
 
     return (
@@ -57,20 +83,13 @@ function App() {
                     <Sort />
                 </div>
                 <div className="col-xs-5 col-sm-5 col-md-5 col-lg-5">
-                    <button type="button" className="btn btn-info btn-block marginB10" onClick={handleClick}>Add Item</button>
+                    <button type="button" className="btn btn-info btn-block marginB10" onClick={handleShowModalAdd}>Add Item</button>
                 </div>
             </div>
-            <div className="marginB10">
-                <div className="col-md-offset-7 col-md-5">
-                    <FormCreadorUpdate
-                        show={showComponent}
-                        onHide={handleCloseModal}
-                        title="Add Item"
-                        handleAdd={handleAdd}
-                    />
-                </div>
-            </div>
-            <ListItem items={items} onDelete={ handleDelete } />
+            <AppContext.Provider value={{ items, handleAdd, handleDelete, handleEdit, selectedItem, setSelectedItem, handleShowModalEdit, isEditing }}>
+                <ListItem />
+                <FormCreadorUpdate show={showModalEdit} hide={handleCloseModalEdit} />
+            </AppContext.Provider>
         </div>
     );
 }

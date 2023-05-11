@@ -1,7 +1,10 @@
-import React, { Component } from "react";
+import React, { Component, useContext } from "react";
+import { AppContext } from './ListContext';
 import Item from './Item';
 
-function ListItem({ items, onDelete }) {
+function ListItem() {
+    const { items } = useContext(AppContext);
+
     return(
         <div className="panel panel-success">
             <div className="panel-heading">List Item</div>
@@ -15,9 +18,9 @@ function ListItem({ items, onDelete }) {
                     </tr>
                 </thead>
                 <tbody>
-                    { items.length ?
+                    {items.length ?
                         (items.map((data, index) => (
-                            <Item key={index} data={data} index={index} onDelete={onDelete} />
+                            <Item key={index} data={data} index={index} />
                         ))) : 
                         <tr>
                             <td colSpan="4" className="text-center">  
