@@ -35,10 +35,13 @@ function Item(props) {
     };
 
     return (
-        <tr>
+        <tr onClick={() => handleItemClick(props.data)}>
             <td className="text-center">{props.index + 1}</td>
             <td>{ props.data.name }</td>
             <td className="text-center"><span className={className}>{ label }</span></td>
+            {/* <td className="text-center">
+                <img style={{ width: '100px' }} src={process.env.PUBLIC_URL + props.data.thumb} alt="example" />
+            </td> */}
             <td>
                 <button type="button" className="btn btn-warning btn-sm" onClick={() => handleItemClick(props.data)}>Edit</button>&nbsp;
                 <button type="button" className="btn btn-danger btn-sm" onClick={handleButtonDelelte}>Delete</button>

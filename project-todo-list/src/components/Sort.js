@@ -1,23 +1,33 @@
-import React, { Component } from "react";
+import React, { useState } from 'react';
+import { Dropdown } from 'react-bootstrap';
 
-class Sort extends Component{
-    render() {
-        return (
-            <div className="dropdown">
-                <button className="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                    Sort by <span className="caret" />
-                </button>
-                <ul className="dropdown-menu">
-                    <li><a role="button">Name ASC</a></li>
-                    <li><a role="button">Name DESC</a></li>
-                    <li role="separator" className="divider" />
-                    <li><a role="button">Level ASC</a></li>
-                    <li><a role="button">Level DESC</a></li>
-                </ul>
-                <span className="label label-success label-medium">NAME - DESC</span>
-            </div>
-        )
+function Sort(props) {
+    const [selectedOption, setSelectedOption] = useState();
+    
+    function handleOptionSelect(sortType, sortOrder) {
+        const option = `${sortType}-${sortOrder}`;
+        props.onSortBy(option);
     }
+
+    return (
+        <Dropdown>
+            <Dropdown.Toggle variant="primary" id="dropdown-basic">
+                Sort by
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu>
+                <Dropdown.Item onClick={() => handleOptionSelect('name', 'asc')}>Name ASC</Dropdown.Item>
+                <Dropdown.Item onClick={() => handleOptionSelect('name', 'desc')}>Name DESC</Dropdown.Item>
+                <Dropdown.Item onClick={() => handleOptionSelect('level', 'asc')}>Level ASC</Dropdown.Item>
+                <Dropdown.Item onClick={() => handleOptionSelect('level', 'desc')}>Level DESC</Dropdown.Item>
+            </Dropdown.Menu>&nbsp;
+            {selectedOption && (
+                <span className="label label-success label-medium">
+                    {selectedOption.sortType} {selectedOption.sortOrder}
+                </span>
+            )}
+        </Dropdown>
+    )
 }
 
 export default Sort;

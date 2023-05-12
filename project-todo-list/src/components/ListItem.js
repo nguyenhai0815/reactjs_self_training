@@ -3,7 +3,7 @@ import { AppContext } from './ListContext';
 import Item from './Item';
 
 function ListItem() {
-    const { items } = useContext(AppContext);
+    const { items, sortedList } = useContext(AppContext);
 
     return(
         <div className="panel panel-success">
@@ -18,8 +18,8 @@ function ListItem() {
                     </tr>
                 </thead>
                 <tbody>
-                    {items.length ?
-                        (items.map((data, index) => (
+                    {sortedList.length ?
+                        (sortedList.map((data, index) => (
                             <Item key={index} data={data} index={index} />
                         ))) : 
                         <tr>
