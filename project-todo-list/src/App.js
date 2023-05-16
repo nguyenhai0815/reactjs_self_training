@@ -11,6 +11,8 @@ import { AppContext } from './components/ListContext';
 import { CSVLink } from 'react-csv';
 import Papa from 'papaparse';
 
+import { read, utils, writeFile } from 'xlsx';
+
 function App() {
     // sử dụng useState để khởi tạo state items
     const [items, setItems] = useState([]);
@@ -49,6 +51,7 @@ function App() {
     // add item
     const handleAdd = (newItem) => {
         setItems([...items, newItem]);
+        // console.log("newItem", newItem);
     };
 
     // handle edit item
@@ -132,6 +135,50 @@ function App() {
         });
     }
 
+    // import export excel
+    // const [items, setItems] = useState([]);
+
+    const handleImport = ($event) => {
+        const files = $event.target.files;
+        if (files.length) {
+            const file = files[0];
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const wb = read(event.target.result);
+                const sheets = wb.SheetNames;
+
+                if (sheets.length) {
+                    const rows = utils.sheet_to_json(wb.Sheets[sheets[0]]);
+                    setItems((prevItems) => [...prevItems, ...rows]);
+                }
+            }
+            reader.readAsArrayBuffer(file);
+        }
+    }
+
+    const handleExport = () => {
+        // Tên các cột
+        const headings = [[
+            'name',
+            'level',
+        ]];
+        // Loại bỏ cột id
+        const filteredData = items.map(({ id, ...rest }) => rest);
+        
+        // Tạo workbook và worksheet
+        const wb = utils.book_new();
+        const ws = utils.json_to_sheet([]);
+
+        utils.sheet_add_aoa(ws, headings);
+        utils.sheet_add_json(ws, filteredData, { origin: 'A2', skipHeader: true });
+        
+        // Thêm worksheet vào workbook
+        utils.book_append_sheet(wb, ws, 'List');
+
+        // Xuất file
+        writeFile(wb, 'ItemLists.csv');
+    }
+
     return (
         <div className="container">
             <Title />
@@ -142,12 +189,21 @@ function App() {
                 <div className="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                     <Sort sortedBy={sortedBy} onSortBy={handleSortBy} />
                 </div>
-                <div className="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                <div className="col-xs-5 col-sm-5 col-md-5 col-lg-5" style={{float: "right"}}>
                     <button type="button" className="btn btn-info btn-block marginB10" onClick={handleShowModalAdd}>Add Item</button>&nbsp;
-                    <button type="button" className="btn btn-info btn-block marginB10">
+                    {/* <button type="button" className="btn btn-info btn-block marginB10">
                         <ExportCSVButton data={items} />
                     </button>&nbsp;
-                    <input type="file" onChange={handleFileUpload} />
+                    <input type="file" onChange={handleFileUpload} /> */}
+                    <button type="button" className="btn btn-info btn-block marginB10" onClick={handleExport}>
+                        Export
+                    </button>
+                    <input type="file" name="file" style={{display: "none"}} className="custom-file-input" id="inputGroupFile" onChange={handleImport}
+                        accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
+                    &nbsp;
+                    <label className="custom-file-label btn btn-info btn-block marginB10" htmlFor="inputGroupFile">
+                        Import
+                    </label>
                 </div>
             </div>
             <AppContext.Provider value={{ items, handleAdd, handleDelete, handleEdit, selectedItem, setSelectedItem, handleShowModalEdit, isEditing, sortedList }}>
