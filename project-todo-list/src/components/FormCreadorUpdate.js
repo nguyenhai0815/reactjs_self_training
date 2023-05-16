@@ -1,4 +1,4 @@
-import React, { Component, useContext, useState } from "react";
+import React, { Component, useContext, useState, useEffect } from "react";
 import { Modal, Form, FormGroup, FormControl, FormLabel, Button, FormFile } from 'react-bootstrap';
 
 import { AppContext } from './ListContext';
@@ -12,10 +12,37 @@ function FormCreadorUpdate(props) {
         name: selectedItem ? selectedItem.name : "",
         level: selectedItem ? selectedItem.level : "",
     });
+
+    // upload image
+    const [images, setImages] = useState([]);
+
+    //
+    const [file, setFile] = useState([]);
+    const [imageUrl, setImageUrl] = useState([]);
+
+    useEffect(() => {
+        const newImageUrls = [];
+        images.forEach(image => newImageUrls.push(URL.createObjectURL(image)));
+        setImageUrl(newImageUrls);
+    }, [images]);
+
+    function onImageUrl(e) {
+        setImages([...e.target.files]);
+        console.log("images", images);
+    }
+
+    function handleChange(e) {
+        console.log(e.target.files);
+        const selectedFile = e.target.files[0];
+        setFile(URL.createObjectURL(selectedFile));
+        // setFile(URL.createObjectURL(e.target.files[0]));
+    }
+
     // add item
     const [newItem, setNewItem] = useState({
         name: "",
         level: "",
+        thumb: "",
     });
 
     const handleInputChange = (event) => {
@@ -31,14 +58,6 @@ function FormCreadorUpdate(props) {
         setNewItem({ ...newItem, [name]: value });
     };
 
-    // file
-    const [imageFile, setImageFile] = useState(null);
-
-    const handleImageChange = (event) => {
-        const image = event.target.files[0];
-        setImageFile(image);
-    };
-
     // validate
     const [errors, setErrors] = useState([]);
 
@@ -52,6 +71,7 @@ function FormCreadorUpdate(props) {
                 ...selectedItem,
                 name: selectedItem.name,
                 level: selectedItem.level,
+                thumb: selectedItem.thumb,
             };
             if (updatedItem.name.trim() === "") {
                 newErrors.push({
@@ -87,7 +107,7 @@ function FormCreadorUpdate(props) {
             setErrors(newErrors);
             if (newErrors.length === 0) {
                 handleAdd(newItem);
-                setNewItem({ name: "", level: "" });
+                setNewItem({ name: "", level: "", thumb: ""});
                 props.hide();
             }
         }
@@ -129,6 +149,16 @@ function FormCreadorUpdate(props) {
                             error.field === "level" && <span key={error.message}>{ error.message }</span>
                         ))}
                     </FormGroup>
+                    <FormGroup>
+                        <FormLabel>Image</FormLabel>
+                        <FormControl
+                            type="file"
+                            name="thumb"
+                            onChange={handleInputChange}
+                        />
+                        <img style={{ position: 'relative', width: '100%', marginTop: '15px' }} src={isEditing ? (selectedItem ? selectedItem.thumb : "") : newItem.thumb} alt=""></img>
+                    </FormGroup>
+                    
                     <br/>
                     <Button type="submit">{ isEditing ? 'Edit' : 'Add' }</Button>&nbsp;
                     <Button variant="secondary" onClick={props.hide}>Close</Button>

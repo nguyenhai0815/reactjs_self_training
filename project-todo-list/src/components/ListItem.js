@@ -14,6 +14,7 @@ function ListItem() {
                         <th style={{ width: '10%' }} className="text-center">#</th>
                         <th>Name</th>
                         <th style={{ width: '15%' }} className="text-center">Level</th>
+                        {/* <th className="text-center">Thumb</th> */}
                         <th style={{ width: '15%' }}>Action</th>
                     </tr>
                 </thead>
